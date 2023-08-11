@@ -1,7 +1,7 @@
 package br.com.cursopcv.testes;
 
+import br.com.cursopcv.dao.ProdutoDAO;
 import br.com.cursopcv.modelo.Produto;
-import br.com.cursopcv.repositorio.ProdutoDAO;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,10 +11,10 @@ public class RemocaoDeProduto {
 
     public static void main(String[] args) {
         ProdutoDAO produtoDAO = new ProdutoDAO();
-        produtoDAO.abrirT();
 
         try {
-            Produto produto = produtoDAO.entityManager().find(Produto.class, 3);
+            produtoDAO.abrirT();
+            Produto produto = produtoDAO.buscarPorCod(3);
 
             if (produto != null) {
                 produtoDAO.removerUm(produto);
@@ -26,7 +26,7 @@ public class RemocaoDeProduto {
             }
         } catch (Exception e) {
             produtoDAO.reverterT();
-            logger.log(Level.SEVERE, "Um erro ocorreu na execução do programa.", e);
+            logger.log(Level.SEVERE, "Não conseguimos remover o produto.", e);
         } finally {
             produtoDAO.fechar();
         }

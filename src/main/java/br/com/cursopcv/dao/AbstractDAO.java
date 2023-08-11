@@ -1,4 +1,4 @@
-package br.com.cursopcv.infra;
+package br.com.cursopcv.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -7,8 +7,8 @@ import jakarta.persistence.Persistence;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class DAO<T> {
-    private static final Logger logger = Logger.getLogger(DAO.class.getName());
+public abstract class AbstractDAO<T> {
+    private static final Logger logger = Logger.getLogger(AbstractDAO.class.getName());
     private static EntityManagerFactory emf;
 
     static {
@@ -23,37 +23,29 @@ public abstract class DAO<T> {
     private final EntityManager em;
     private final Class<T> classe;
 
-    public DAO() {
-        this(null);
-    }
-
-    public DAO(Class<T> classe) {
+    public AbstractDAO(Class<T> classe) {
         this.classe = classe;
         em = emf.createEntityManager();
     }
 
-    public DAO<T> abrirT() {
+    public void abrirT() {
         em.getTransaction().begin();
-        return this;
     }
 
-    public DAO<T> fecharT() {
+    public void fecharT() {
         em.getTransaction().commit();
-        return this;
     }
 
-    public DAO<T> reverterT() {
+    public void reverterT() {
         em.getTransaction().rollback();
-        return this;
     }
 
-    public EntityManager entityManager() {
-        return em;
+    public T buscarPorCod(Object cod) {
+        return em.find(classe, cod);
     }
 
-    public DAO<T> removerUm(T entidade) {
+    public void removerUm(T entidade) {
         em.remove(entidade);
-        return this;
     }
 
     // Fechando ambos EntityManager e EntityManagerFactory
