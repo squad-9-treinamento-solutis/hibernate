@@ -50,6 +50,19 @@ public abstract class AbstractDAO<T> {
 
     public void atualizar(T entidade) { em.merge(entidade); }
 
+    public List<T> ListaTodosProdutos(){
+
+        if(classe == null) {
+            throw new UnsupportedOperationException("Classe nula.");
+        }
+
+        String jpql = "select * from " + classe.getName();
+        TypedQuery<T> query = em.createQuery(jpql, classe);
+
+        return  query.getResultList();
+
+    };
+    
     // Fechando ambos EntityManager e EntityManagerFactory
     public void fechar() {
         em.close();
