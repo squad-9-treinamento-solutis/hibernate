@@ -48,6 +48,8 @@ public abstract class AbstractDAO<T> {
         em.remove(entidade);
     }
 
+    public void atualizar(T entidade) { em.merge(entidade); }
+
     // Fechando ambos EntityManager e EntityManagerFactory
     public void fechar() {
         em.close();
