@@ -3,7 +3,9 @@ package br.com.cursopcv.dao;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,21 +50,25 @@ public abstract class AbstractDAO<T> {
         em.remove(entidade);
     }
 
-    public void atualizar(T entidade) { em.merge(entidade); }
+    public void atualizar(T entidade) {
+        em.merge(entidade);
+    }
 
-    public List<T> ListaTodosProdutos(){
+    public void inserir(Object T) {
+        em.persist(T);
+    }
 
-        if(classe == null) {
+    public List<T> ListaTodosProdutos() {
+        if (classe == null) {
             throw new UnsupportedOperationException("Classe nula.");
         }
 
         String jpql = "select * from " + classe.getName();
         TypedQuery<T> query = em.createQuery(jpql, classe);
 
-        return  query.getResultList();
+        return query.getResultList();
+    }
 
-    };
-    
     // Fechando ambos EntityManager e EntityManagerFactory
     public void fechar() {
         em.close();
